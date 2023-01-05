@@ -47,13 +47,13 @@ export const getTokenFunc = async () =>{
     });
 })();
 
-export const onMessageListener = () => {
-    // let data = {};
-    // onMessage(messaging, (payload) => {
-    //     console.log('Message received. ', payload);
-    //     data = payload;
-    // });
-    // return data;
-};
+// export const onMessageListener = () => {
+//     let data = {};
+//     onMessage(messaging, (payload) => {
+//         console.log('Message received. ', payload);
+//         data = payload;
+//     });
+//     return data;
+// };
 
 

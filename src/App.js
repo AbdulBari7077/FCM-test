@@ -23,11 +23,9 @@ function App() {
       return token;
     })();
 
-
     onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
+      console.log('Message received.', payload);
       if (payload) {
-        console.log(payload, "PAYLOAD")
         setShow(true);
         setNotification({
           title: payload.notification.title,
@@ -43,6 +41,7 @@ function App() {
 
   return (
     <div className="App">
+
       {show ? (
         <ReactNotificationComponent
           title={notification.title}
