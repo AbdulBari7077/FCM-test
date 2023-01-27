@@ -11,46 +11,69 @@ import { uuidv4 } from "@firebase/util";
 
 function App() {
   const [socket, setsocket] = useState(io.connect("http://localhost:3300"));
-  
-  function notifyUsers(){
+  function notifyMe() {
+    if (!window.Notification) {
+      console.log('Browser does not support notifications.');
+  } else {
+      // check if permission is already granted
+      if (Notification.permission === 'granted') {
+          // show notification here
+      } else {
+          // request permission from user
+          Notification.requestPermission().then(function(p) {
+             if(p === 'granted') {
+                 // show notification here
+             } else {
+                 console.log('User blocked notifications.');
+             }
+          }).catch(function(err) {
+              console.error(err);
+          });
+      }
+  }
+  }
+  function notifyUsers() {
     const members = [
       {
-        admin:false,
-        externalEmail:false,
-        userId:"473f8d1f-9d1a-4520-bef0-e64869f00e37"
+        admin: false,
+        externalEmail: false,
+        userId: "473f8d1f-9d1a-4520-bef0-e64869f00e37"
       },
       {
-        admin:false,
-        externalEmail:false,
-        userId:"2"
+        admin: false,
+        externalEmail: false,
+        userId: "2"
       },
       {
-        admin:true,
-        externalEmail:false,
-        userId:"3"
+        admin: true,
+        externalEmail: false,
+        userId: "3"
       }
     ]
-    socket.emit("notify-users",{ members , callInitializer:"473f8d1f-9d1a-4520-bef0-e64869f00e37" })
+    socket.emit("notify-users", { members, callInitializer: "473f8d1f-9d1a-4520-bef0-e64869f00e37" })
   }
-  socket.emit('connect-workwise',{
+  // socket.userId="473f8d1f-9d1a-4520-bef0-e64869f00e37";
+  console.log(socket)
+  socket.emit('connect-workwise', {
     // userId:uuidv4(),
     userId: "473f8d1f-9d1a-4520-bef0-e64869f00e37"
   })
-  socket.on("notification-connected",(data)=>{
+  socket.on("notification-connected", (data) => {
     console.log(data);
   })
-  socket.on("send-notification",(callInitializer)=>{
+  socket.on("send-notification", (callInitializer) => {
     console.log(`${callInitializer} is Calling !`);
     //set timeout for 1 minute rinigng etc
-    socket.emit("send-notification-reply",{ message:"notification-received",callInitializer});
+    socket.emit("send-notification-reply", { message: "notification-received", callInitializer });
   })
-  socket.on("notify-CallInitializer",(message)=>{
-    console.log( message);
+  socket.on("notify-CallInitializer", (message) => {
+    console.log(message);
     // socket.emit("send-notification-reply",{ message:"notification-received"} ,callInitializer);
   })
   const [show, setShow] = useState(false);
   const [notification, setNotification] = useState({ title: "", body: "" });
   useEffect(() => {
+    notifyMe();
     (async () => {
       let token = '';
       token = await getTokenFunc();
@@ -70,13 +93,13 @@ function App() {
         });
       }
     });
-    
+
 
 
   }, []);
- 
-  
-  
+
+
+
   return (
     <div className="App">
       <button onClick={notifyUsers}>
